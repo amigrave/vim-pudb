@@ -9,11 +9,6 @@ if exists('g:loaded_pudb_plugin') || &cp
 endif
 let g:loaded_pudb_plugin = 1
 
-if !has("python")
-    echo "Error: Required vim compiled with +python"
-    finish
-endif
-
 sign define PudbBreakPoint text=Ø) texthl=error
 
 let s:first_sign_id = 10000
@@ -26,6 +21,11 @@ augroup end
 command! TogglePudbBreakPoint call s:ToggleBreakPoint()
 
 function! s:UpdateBreakPoints()
+
+if !has("python")
+    echo "Error: Required vim compiled with +python"
+    return
+endif
 
 " first remove existing signs
 if !exists("b:pudb_sign_ids")
@@ -59,6 +59,12 @@ EOF
 endfunction
 
 function! s:ToggleBreakPoint()
+
+if !has("python")
+    echo "Error: Required vim compiled with +python"
+    return
+endif
+
 python << EOF
 import vim
 from pudb.settings import load_breakpoints, save_breakpoints
